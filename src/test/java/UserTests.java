@@ -107,10 +107,10 @@ public class UserTests {
     public void TestGetUsers(){
         //given
         User[] users = Main.getUsers();
+        int expectedLength = 4;
 
         //when
         int actualLength = users.length;
-        int expectedLength = 4;
 
         //then
         assertEquals(expectedLength, actualLength);
@@ -131,6 +131,7 @@ public class UserTests {
         User[] expectedList = new User[]{user1, user2,user3,user4};
         User[] actualList = Main.getUsers();
 
+
         //when
         String actual = Arrays.asList(actualList).toString();
         String expected = Arrays.asList(expectedList).toString();
@@ -145,6 +146,7 @@ public class UserTests {
 
         //when
         List<User> expected = List.of(Main.getUsers());
+
         //then
         assertNotNull(expected);
     }
@@ -178,7 +180,7 @@ public class UserTests {
 
 
     @ValueSource(ints = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17})
-    @ParameterizedTest (name = "User validation by age {arguments}")
+    @ParameterizedTest (name = "Validate user with age {arguments}")
     public void TestValidateUserUnder18YearsOld(int input) {
 
         //given
@@ -197,16 +199,16 @@ public class UserTests {
     public void TestValidateUserOver18YearsOld(int age) throws AccessDeniedException {
         //given
         User user = new User("test", "test", "test", age);
+        boolean expected = true;
 
         //when
-        boolean expected = true;
         boolean actual = Main.validateUser(user);
 
         //then
         assertEquals(expected, actual);
     }
     static IntStream AgesOlder18() {
-        //возрасты в диапазоне от 18 до максимальной продолжительности жизни / Канэ Танака — 118 лет - Япония
+        //возраст в диапазоне от 18 до максимальной продолжительности жизни / Канэ Танака — 118 лет - Япония
         return IntStream.range(18, 119);
     }
 
@@ -229,11 +231,11 @@ public class UserTests {
     public void TestAccessDeniedExceptionMessage() {
 
         //given
-        String actual = "Тестовое сообщение";
-        AccessDeniedException exceptionMessage = new AccessDeniedException(actual);
+        String expected = "Тестовое сообщение";
 
         //when
-        String expected = exceptionMessage.getMessage();
+        AccessDeniedException exceptionMessage = new AccessDeniedException(expected);
+        String actual = exceptionMessage.getMessage();
 
         //then
         assertEquals(expected, actual);
@@ -259,11 +261,11 @@ public class UserTests {
     public void TestUserNotFoundExceptionMessage() {
 
         //given
-        String actual = "Тестовое сообщение";
-        UserNotFoundException exceptionMessage = new UserNotFoundException(actual);
+        String expected = "Тестовое сообщение";
 
         //when
-        String expected = exceptionMessage.getMessage();
+        UserNotFoundException exceptionMessage = new UserNotFoundException(expected);
+        String actual = exceptionMessage.getMessage();
 
         //then
         assertEquals(expected, actual);
