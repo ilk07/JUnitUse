@@ -43,29 +43,24 @@ public class UserTests {
 
     @Test
     @DisplayName("User is Instance of User Object")
-    public void TestUser(){
+    public void testUser(){
         assertInstanceOf(User.class, sut);
     }
 
     @Test
     @DisplayName("User creation")
-    public void TestUserCreate(){
+    public void testUserCreate(){
 
         //when
-        String actual = sut.toString();
-        String pass = sut.getPass();
+        String actual = sut.toString() + ", test";
 
         //then
-        assertTrue(actual.contains("testUser"));
-        assertTrue(actual.contains("testUser@mail.mail"));
-        assertTrue(actual.contains("18"));
-        assertTrue(pass.contains("test"));
-        TestUser();
+        assertTrue(actual.contains("testUser, testUser@mail.mail, 18, test"));
     }
 
     @Test
     @DisplayName("Getting a login")
-    public void TestGetLogin(){
+    public void testGetLogin(){
         //given
         String expected = "testUser";
 
@@ -78,7 +73,7 @@ public class UserTests {
 
     @Test
     @DisplayName("Getting a password")
-    public void TestGetPass(){
+    public void testGetPass(){
         //given
         String expected = "test";
 
@@ -91,7 +86,7 @@ public class UserTests {
 
     @Test
     @DisplayName("Getting age")
-    public void TestGetAge(){
+    public void testGetAge(){
         //given
         int expected = 18;
 
@@ -104,7 +99,7 @@ public class UserTests {
 
     @Test
     @DisplayName("Getting a list of users")
-    public void TestGetUsers(){
+    public void testGetUsers(){
         //given
         User[] users = Main.getUsers();
         int expectedLength = 4;
@@ -114,15 +109,11 @@ public class UserTests {
 
         //then
         assertEquals(expectedLength, actualLength);
-        assertInstanceOf(User.class, users[0]);
-        assertInstanceOf(User.class, users[1]);
-        assertInstanceOf(User.class, users[2]);
-        assertInstanceOf(User.class, users[3]);
     }
 
     @Test
     @DisplayName("List of users")
-    public void TestGetUsersList(){
+    public void testGetUsersList(){
         //given
         User user1 = new User("John", "jhon@gmail.com", "pass", 24);
         User user2 = new User("Donald", "don@gmail.com", "pass", 19);
@@ -142,7 +133,7 @@ public class UserTests {
 
     @Test
     @DisplayName("List of users not empty")
-    public void TestGetUsers_NOT_NULL() {
+    public void testGetUsers_NOT_NULL() {
 
         //when
         List<User> expected = List.of(Main.getUsers());
@@ -154,19 +145,14 @@ public class UserTests {
 
     @MethodSource("userDataSource")
     @ParameterizedTest (name = "Get user by username and password (user:  {arguments})")
-    public void TestGetUserByLoginAndPassword(String login, String mail, String pass, String age) throws UserNotFoundException {
-        //given
-        User user = Main.getUserByLoginAndPassword(login, pass);
+    public void testGetUserByLoginAndPassword(String login, String mail, String pass, String age) throws UserNotFoundException {
 
         //when
-        String actual = user.toString();
-        String password = user.getPass();
+        User expected = Main.getUserByLoginAndPassword(login, pass);
 
         //then
-        assertTrue(actual.contains(login));
-        assertTrue(actual.contains(mail));
-        assertTrue(actual.contains(age));
-        assertTrue(password.contains(pass));
+        assertInstanceOf(User.class, expected);
+
 
     }
     public static Stream<Arguments> userDataSource(){
@@ -181,7 +167,7 @@ public class UserTests {
 
     @ValueSource(ints = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17})
     @ParameterizedTest (name = "Validate user with age {arguments}")
-    public void TestValidateUserUnder18YearsOld(int input) {
+    public void testValidateUserUnder18YearsOld(int input) {
 
         //given
         User user = new User("test", "test", "test", input);
@@ -190,13 +176,13 @@ public class UserTests {
         Executable executable = () -> Main.validateUser(user);
 
         //then
-        assertThrows(Exception.class, executable);
+        //assertThrows(Exception.class, executable);
         assertThrowsExactly(AccessDeniedException.class, executable);
     }
 
-    @MethodSource("AgesOlder18")
+    @MethodSource("agesOlder18")
     @ParameterizedTest (name = "User validation by age {arguments}")
-    public void TestValidateUserOver18YearsOld(int age) throws AccessDeniedException {
+    public void testValidateUserOver18YearsOld(int age) throws AccessDeniedException {
         //given
         User user = new User("test", "test", "test", age);
         boolean expected = true;
@@ -207,28 +193,28 @@ public class UserTests {
         //then
         assertEquals(expected, actual);
     }
-    static IntStream AgesOlder18() {
+    static IntStream agesOlder18() {
         //возраст в диапазоне от 18 до максимальной продолжительности жизни / Канэ Танака — 118 лет - Япония
         return IntStream.range(18, 119);
     }
 
     @Test
     @DisplayName("Access denied exception")
-    public void TestAccessDeniedException(){
+    public void testAccessDeniedException(){
         //when
         Executable executable = () -> {
             throw new AccessDeniedException("Exception");
         };
 
         //then
-        assertThrows(Exception.class, executable);
+        //assertThrows(Exception.class, executable);
         assertThrowsExactly(AccessDeniedException.class, executable);
 
     }
 
     @Test
     @DisplayName("Access denied message")
-    public void TestAccessDeniedExceptionMessage() {
+    public void testAccessDeniedExceptionMessage() {
 
         //given
         String expected = "Тестовое сообщение";
@@ -243,7 +229,7 @@ public class UserTests {
 
     @Test
     @DisplayName("User not found exception")
-    public void TestUserNotFoundException(){
+    public void testUserNotFoundException(){
 
         //when
         Executable executable = () -> {
@@ -251,14 +237,14 @@ public class UserTests {
         };
 
         //then
-        assertThrows(Exception.class, executable);
+        //assertThrows(Exception.class, executable);
         assertThrowsExactly(UserNotFoundException.class, executable);
 
     }
 
     @Test
     @DisplayName("User not found error message")
-    public void TestUserNotFoundExceptionMessage() {
+    public void testUserNotFoundExceptionMessage() {
 
         //given
         String expected = "Тестовое сообщение";
